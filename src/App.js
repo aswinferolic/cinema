@@ -1,7 +1,67 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
+import {useDispatch} from 'react-redux';
+import styled from 'styled-components';
+import {init} from './redux/actions';
+import Discover from './pages/Discover';
+import Sidebar from './components/Sidebar';
+
+const Layout = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  user-select: none;
+`;
+
+const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 4rem;
+
+  @media ${(props) => props?.theme?.mediaQueries?.larger} {
+    padding: 6rem 3rem;
+  }
+
+  @media ${(props) => props?.theme?.mediaQueries?.large} {
+    padding: 4rem 2rem;
+  }
+`;
 
 const App = () => {
-  return <div>App</div>;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(init());
+  });
+  return (
+    <Router>
+      <Sidebar />
+      <Layout>
+        <Wrapper>
+          <Routes>
+            <Route
+              path="/"
+              exact
+              element={<Navigate replace to={'/discover/Popular'} />}
+            />
+            <Route path="/discover/:name" element={<Discover />} />
+          </Routes>
+        </Wrapper>
+      </Layout>
+    </Router>
+  );
 };
 
 export default App;
