@@ -69,3 +69,57 @@ export const setSelectedMenu = (name) => async (dispatch, getState) => {
     });
   }
 };
+
+export const getMoviesDiscover = (name, page) => async (dispatch, getState) => {
+  try {
+    const {selected} = getState().config;
+    if (!selected) return;
+
+    dispatch({type: TYPES.FETCH_MOVIES_LOADING});
+    const res = await movieAPI.get(`/movie/${name}`, {
+      params: {
+        page,
+      },
+    });
+    await dispatch({
+      type: TYPES.FETCH_MOVIES_DISCOVER,
+      payload: res?.data,
+    });
+
+    dispatch({type: TYPES.FETCH_MOVIES_FINISHED});
+  } catch (error) {
+    dispatch({
+      type: TYPES.INSERT_ERROR,
+      payload: error?.response,
+    });
+  }
+};
+
+export const getMoviesGenres = (name, page) => async (dispatch, getState) => {
+  try {
+    const {selected, genres} = getState().config;
+    if (!selected) return;
+    await dispatch({type: TYPES.FETCH_MOVIES_LOADING});
+    const genreId = genres
+      .filter((el) => el.name === name)
+      .map((el) => el.id)
+      .join('');
+    console.log('name', genres);
+    console.log('genreID', genreId);
+    const res = await movieAPI.get('/discover/movie', {
+      params: {
+        with_genres: genreId,
+        page,
+      },
+    });
+    await dispatch({
+      type: TYPES.FETCH_MOVIES_DISCOVER,
+      payload: res?.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: TYPES.INSERT_ERROR,
+      payload: error?.response,
+    });
+  }
+};

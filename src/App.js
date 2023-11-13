@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import {init} from './redux/actions';
 import Discover from './pages/Discover';
 import Sidebar from './components/Sidebar';
+import Genres from './pages/Genres';
 
 const Layout = styled.div`
   width: 100%;
@@ -56,6 +57,7 @@ const App = () => {
               element={<Navigate replace to="/discover/popular" />}
             />
             <Route path="/discover/:name" element={<Discover />} />
+            <Route path="/genres/:name" element={<Genres />} />
           </Routes>
         </Wrapper>
       </Layout>
