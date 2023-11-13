@@ -53,8 +53,7 @@ const App = () => {
           <Routes>
             <Route
               path="/"
-              exact
-              element={<Navigate replace to={'/discover/Popular'} />}
+              element={<Navigate replace to="/discover/popular" />}
             />
             <Route path="/discover/:name" element={<Discover />} />
           </Routes>

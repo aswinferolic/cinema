@@ -23,13 +23,13 @@ export default createGlobalStyle`
         --shadow-color : rgba(0, 0, 0, 0.2);
         --shadow-color : rgba(0, 0, 0, 0.25);
 
-        ${(props) => props?.theme?.mediaQueries?.largest} {
+         @media ${(props) => props.theme.mediaQueries.largest}{
             font-size : 57.5%;
         }
 
-       ${(props) => props?.theme?.mediaQueries?.large} {
-        font-size: 55%;
-       }
+        @media ${(props) => props.theme.mediaQueries.large}{
+            font-size: 55%;
+        }
     }
 
     body {
