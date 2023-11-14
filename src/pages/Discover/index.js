@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import {useParams, useLocation} from 'react-router-dom';
+import {animateScroll as scroll} from 'react-scroll';
 import {
   clearMovies,
   getMoviesDiscover,
@@ -9,6 +10,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import MoviesList from '../../components/MoviesList';
 import styled from 'styled-components';
 import Header from '../../components/Header';
+import Pagination from '../../components/Pagination';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -30,6 +32,9 @@ const Discover = () => {
 
   useEffect(() => {
     dispatch(setSelectedMenu(name));
+    scroll.scrollToTop({
+      smooth: true,
+    });
     dispatch(getMoviesDiscover(lowercasedName, page));
     dispatch(clearMovies());
   }, [dispatch, lowercasedName, name, page]);
@@ -45,6 +50,8 @@ const Discover = () => {
       {!config?.loading && (
         <MoviesList movies={movies} baseurl={secure_base_url} />
       )}
+
+      {!config?.loading && <Pagination movies={movies} />}
     </Wrapper>
   );
 };

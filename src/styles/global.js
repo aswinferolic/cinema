@@ -44,6 +44,8 @@ export default createGlobalStyle`
     }
 
     a {
+        outline: none;
+        border : none;
         text-decoration: none;
         color : black;
     }
