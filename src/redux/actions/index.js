@@ -104,8 +104,7 @@ export const getMoviesGenres = (name, page) => async (dispatch, getState) => {
       .filter((el) => el.name === name)
       .map((el) => el.id)
       .join('');
-    console.log('name', genres);
-    console.log('genreID', genreId);
+
     const res = await movieAPI.get('/discover/movie', {
       params: {
         with_genres: genreId,
@@ -122,4 +121,8 @@ export const getMoviesGenres = (name, page) => async (dispatch, getState) => {
       payload: error?.response,
     });
   }
+};
+
+export const clearMovies = () => {
+  return {type: TYPES.FETCH_MOVIES_LOADING};
 };
