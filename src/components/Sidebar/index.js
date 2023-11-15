@@ -4,6 +4,8 @@ import {slide as Menu} from 'react-burger-menu';
 import slidestyle from '../../styles/slide';
 import * as S from './style';
 import MenuItem from '../MenuItem';
+import Searchbar from '../Searchbar';
+import TmdbGreenSvg from '../../svg/tmdbgreen.svg';
 
 const Sidebar = () => {
   const config = useSelector((state) => state.config);
@@ -22,12 +24,30 @@ const Sidebar = () => {
           <S.Bar />
           <S.Bar />
         </S.Hamburger>
+        <Searchbar />
       </S.WrapperStickyBox>
       <Menu isOpen={isOpened} onStateChange={isMenuOpen} styles={slidestyle}>
         <S.Heading> Discover </S.Heading>
         {renderStatic(staticCategories, selected, setisOpened)}
         <S.Heading> Genres </S.Heading>
         {!loading && renderGenres(genres, selected, setisOpened)}
+
+        <S.StyledCoffee>
+          <img
+            src="https://www.buymeacoffee.com/assets/img/BMC-btn-logo.svg"
+            alt="Buy me a coffee"
+          />
+          <span style={{marginLeft: '5px'}}> Buy me a coffee </span>
+        </S.StyledCoffee>
+
+        <S.CopyRight>
+          Copyright
+          <S.StyledLink href="https://www.github.com/aswinferolic">
+            2023
+          </S.StyledLink>
+        </S.CopyRight>
+
+        <S.TmdbSvg src={TmdbGreenSvg} alt="the tmdb api" />
       </Menu>
     </>
   );

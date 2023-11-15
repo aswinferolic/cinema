@@ -11,6 +11,7 @@ import {init} from './redux/actions';
 import Discover from './pages/Discover';
 import Sidebar from './components/Sidebar';
 import Genres from './pages/Genres';
+import Search from './pages/Search';
 
 const Layout = styled.div`
   width: 100%;
@@ -59,6 +60,7 @@ const App = () => {
             />
             <Route path="/discover/:name" element={<Discover />} />
             <Route path="/genres/:name" element={<Genres />} />
+            <Route path="/search/:query" element={<Search />} />
           </Routes>
         </Wrapper>
       </Layout>

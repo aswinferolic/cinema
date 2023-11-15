@@ -126,3 +126,31 @@ export const getMoviesGenres = (name, page) => async (dispatch, getState) => {
 export const clearMovies = () => {
   return {type: TYPES.FETCH_MOVIES_LOADING};
 };
+
+export const getMoviesSearch = (query, page) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: TYPES.FETCH_MOVIES_LOADING,
+    });
+    const res = await movieAPI.get('/search/movie', {
+      params: {
+        query,
+        page,
+      },
+    });
+
+    await dispatch({
+      type: TYPES.FETCH_MOVIES_SEARCH,
+      payload: res?.data,
+    });
+
+    dispatch({
+      type: TYPES.FETCH_MOVIES_FINISHED,
+    });
+  } catch (error) {
+    dispatch({
+      type: TYPES.INSERT_ERROR,
+      payload: error?.response,
+    });
+  }
+};

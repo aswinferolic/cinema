@@ -55,3 +55,49 @@ export const LinkWrap = styled(Link)`
   display: block;
   margin-bottom: 0.5rem;
 `;
+
+export const StyledCoffee = styled.a`
+  font-size: 1.2rem;
+  display: flex !important;
+  outline: none;
+  justify-content: center !important;
+  align-items: center !important;
+  background-color: #fff;
+  color: #000;
+  padding: 0.5rem 2rem;
+  border-radius: 3px;
+  font-family: 'Poppins', sans-serif;
+  letter-spacing: 0.6px;
+  box-shadow: 0px 1px 2px rgba(190, 190, 190, 0.5);
+  margin: 2rem auto;
+  transition: 0.3s all linear;
+
+  &img {
+    width: 27px;
+    box-shadow: none;
+    border: none;
+    vertical-align: middle;
+  }
+`;
+
+export const CopyRight = styled.div`
+  display: flex;
+  align-self: center;
+  align-items: center;
+  color: #fff;
+  margin-bottom: 2rem;
+`;
+
+export const StyledLink = styled.a`
+  text-decoration: none;
+  margin-left: 4px;
+  font-weight: 500;
+  color: inherit;
+`;
+
+export const TmdbSvg = styled.img`
+  max-width: 100%;
+  height: 3rem;
+  display: inline-block !important;
+  margin-bottom: 1.4rem !important;
+`;
