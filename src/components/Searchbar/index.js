@@ -37,7 +37,7 @@ const Searchbar = () => {
 
   return (
     <S.Form
-      state={state}
+      state={state.toString()}
       onClick={() => {
         setState(true);
         inputFocus.current.focus();
@@ -45,7 +45,7 @@ const Searchbar = () => {
       onSubmit={onFormSubmit}
       ref={node}
     >
-      <S.Button type="submit" state={state}>
+      <S.Button type="submit" state={state.toString()}>
         <FontAwesomeIcon icon={faSearch} size="1x" />
       </S.Button>
 
@@ -53,7 +53,7 @@ const Searchbar = () => {
         onChange={(e) => setInput(e?.target?.value)}
         ref={inputFocus}
         value={input}
-        state={state}
+        state={state.toString()}
         placeholder="Search for a movie..."
       />
     </S.Form>

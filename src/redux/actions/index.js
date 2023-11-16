@@ -127,7 +127,7 @@ export const clearMovies = () => {
   return {type: TYPES.FETCH_MOVIES_LOADING};
 };
 
-export const getMoviesSearch = (query, page) => async (dispatch, getState) => {
+export const getMoviesSearch = (query, page) => async (dispatch) => {
   try {
     dispatch({
       type: TYPES.FETCH_MOVIES_LOADING,
@@ -153,4 +153,38 @@ export const getMoviesSearch = (query, page) => async (dispatch, getState) => {
       payload: error?.response,
     });
   }
+};
+
+export const getMovieDetail = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: TYPES.FETCH_MOVIE_LOADING,
+    });
+
+    const res = await movieAPI.get(`/movie/${id}`, {
+      params: {
+        append_to_response: 'videos',
+      },
+    });
+
+    await dispatch({
+      type: TYPES.FETCH_MOVIE,
+      payload: res?.data,
+    });
+
+    dispatch({
+      type: TYPES?.FETCH_MOVIE_FINISHED,
+    });
+  } catch (error) {
+    dispatch({
+      type: TYPES.INSERT_ERROR,
+      payload: error?.response,
+    });
+  }
+};
+
+export const clearMovie = () => {
+  return {
+    type: TYPES.FETCH_MOVIE_LOADING,
+  };
 };
