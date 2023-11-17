@@ -1,5 +1,6 @@
 import * as TYPES from './types';
 import movieAPI from '../movieAPI';
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const init = () => async (dispatch) => {
   try {
@@ -47,7 +48,29 @@ export const getGenres = () => async (dispatch) => {
 
 export const setSelectedMenu = (name) => async (dispatch, getState) => {
   try {
-    const {loading, staticCategories, genres} = getState().config;
+    const {loading, staticCategories} = getState().config;
+    const genres = [
+      {id: '28', name: 'Action'},
+      {id: '12', name: 'Adventure'},
+      {id: '16', name: 'Animation'},
+      {id: '35', name: 'Comedy'},
+      {id: '80', name: 'Crime'},
+      {id: '99', name: 'Documentary'},
+      {id: '18', name: 'Drama'},
+      {id: '10751', name: 'Family'},
+      {id: '14', name: 'Fantasy'},
+      {id: '36', name: 'History'},
+      {id: '27', name: 'Horror'},
+      {id: '10402', name: 'Music'},
+      {id: '9648', name: 'Mystery'},
+      {id: '10749', name: 'Romance'},
+      {id: '878', name: 'Science Fiction'},
+      {id: '10770', name: 'TV Movie'},
+      {id: '53', name: 'Thriller'},
+      {id: '10752', name: 'War'},
+      {id: '37', name: 'Western'},
+    ];
+
     if (!loading) {
       if (!name) {
         dispatch({type: TYPES.REMOVE_SELECTED_MENU});
@@ -76,6 +99,7 @@ export const getMoviesDiscover = (name, page) => async (dispatch, getState) => {
     if (!selected) return;
 
     dispatch({type: TYPES.FETCH_MOVIES_LOADING});
+    await delay(400);
     const res = await movieAPI.get(`/movie/${name}`, {
       params: {
         page,
@@ -97,7 +121,30 @@ export const getMoviesDiscover = (name, page) => async (dispatch, getState) => {
 
 export const getMoviesGenres = (name, page) => async (dispatch, getState) => {
   try {
-    const {selected, genres} = getState().config;
+    const {selected} = getState().config;
+
+    const genres = [
+      {id: '28', name: 'Action'},
+      {id: '12', name: 'Adventure'},
+      {id: '16', name: 'Animation'},
+      {id: '35', name: 'Comedy'},
+      {id: '80', name: 'Crime'},
+      {id: '99', name: 'Documentary'},
+      {id: '18', name: 'Drama'},
+      {id: '10751', name: 'Family'},
+      {id: '14', name: 'Fantasy'},
+      {id: '36', name: 'History'},
+      {id: '27', name: 'Horror'},
+      {id: '10402', name: 'Music'},
+      {id: '9648', name: 'Mystery'},
+      {id: '10749', name: 'Romance'},
+      {id: '878', name: 'Science Fiction'},
+      {id: '10770', name: 'TV Movie'},
+      {id: '53', name: 'Thriller'},
+      {id: '10752', name: 'War'},
+      {id: '37', name: 'Western'},
+    ];
+
     if (!selected) return;
     await dispatch({type: TYPES.FETCH_MOVIES_LOADING});
     const genreId = genres

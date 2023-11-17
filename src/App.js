@@ -59,6 +59,10 @@ const App = () => {
               path="/"
               element={<Navigate replace to="/discover/popular" />}
             />
+            <Route
+              path="/cinema"
+              element={<Navigate replace to="/discover/popular" />}
+            />
             <Route path="/discover/:name" element={<Discover />} />
             <Route path="/genres/:name" element={<Genres />} />
             <Route path="/search/:query" element={<Search />} />
