@@ -1,7 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {useParams, useLocation} from 'react-router-dom';
 import * as S from './style';
-import {clearMovie, getMovieDetail} from '../../redux/actions';
+import {
+  clearMovie,
+  getMovieDetail,
+  getRecommendedMovies,
+} from '../../redux/actions';
 import {useSelector, useDispatch} from 'react-redux';
 import LazyLoad from 'react-lazyload';
 import NothingSvg from '../../svg/nothing.svg';
@@ -11,6 +15,9 @@ import Button from '../../components/Button';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faDotCircle, faLink, faPlay} from '@fortawesome/free-solid-svg-icons';
 import {faImdb} from '@fortawesome/free-brands-svg-icons';
+import {animateScroll as scroll, Element} from 'react-scroll';
+import NotFound from '../../components/NotFound';
+import MoviesList from '../../components/MoviesList';
 
 const Movie = () => {
   const dispatch = useDispatch();
@@ -21,66 +28,84 @@ const Movie = () => {
   const config = useSelector((state) => state?.config);
 
   const {secure_base_url} = config?.loading ? '' : config?.base?.images;
+  const search = useLocation().search;
+  const page = new URLSearchParams(search).get('page');
   const {movieId} = useParams();
+  const recommended = useSelector((state) => state.recommendedMovies);
 
   useEffect(() => {
     clearMovie();
     dispatch(getMovieDetail(movieId));
-  }, [dispatch, movieId]);
+    dispatch(getRecommendedMovies(movieId), page);
+    scroll.scrollToTop({
+      smooth: true,
+    });
+  }, [dispatch, movieId, page]);
+
   return (
     <S.Wrapper>
       <LazyLoad offset={500}>
-        <S.MovieWrapper>
-          {!loaded && <S.ImgLoading> Loading...</S.ImgLoading>}
-          <S.ImageWrapper style={!loaded ? {display: 'none'} : {}}>
-            <S.MovieImg
-              contain={contain ? 1 : 0}
-              src={`${secure_base_url}w780${movie?.poster_path}`}
-              onLoad={() => setLoaded(true)}
-              onError={(e) => {
-                setContain(true);
-                if (e.target.src !== `${NothingSvg}`) {
-                  e.target.src = `${NothingSvg}`;
-                }
-              }}
-            />
-          </S.ImageWrapper>
-          <S.MovieDetails>
-            <S.HeaderWrapper>
-              <Header size={2} title={movie?.title} subtitle={movie?.tagline} />
-            </S.HeaderWrapper>
-            <S.DetailsWrapper>
-              <S.RatingsWrapper>
-                <Rating number={movie?.vote_average / 2} />
-                <S.RatingNumber> {movie?.vote_average} </S.RatingNumber>
-              </S.RatingsWrapper>
-              <S.Info>
-                {!movie?.loading &&
-                  renderInfo(
-                    movie.spoken_languages,
-                    movie.runtime,
-                    splitYear(movie.release_date)
-                  )}
-              </S.Info>
-            </S.DetailsWrapper>
-            <S.Heading> The genres</S.Heading>
-            <S.LinkWrapper> {renderGenres(movie?.genres)}</S.LinkWrapper>
-            <S.Heading> Synopsis </S.Heading>
-            <S.Synopsis>
-              {movie?.overview
-                ? movie?.overview
-                : 'There is no synopsis available'}
-            </S.Synopsis>
-            <S.ButtonsWrapper>
-              <S.LeftButtons>
-                {renderWebsite(movie?.homepage)}
-                {renderImdb(movie?.imdb_id)}
-                {renderTrailer(movie?.videos?.results)}
-              </S.LeftButtons>
-            </S.ButtonsWrapper>
-          </S.MovieDetails>
-        </S.MovieWrapper>
+        {!movie?.loading && (
+          <S.MovieWrapper>
+            {!loaded && <S.ImgLoading> Loading...</S.ImgLoading>}
+            <S.ImageWrapper style={!loaded ? {display: 'none'} : {}}>
+              <S.MovieImg
+                contain={contain ? 1 : 0}
+                src={`${secure_base_url}w780${movie?.poster_path}`}
+                onLoad={() => setLoaded(true)}
+                onError={(e) => {
+                  setContain(true);
+                  if (e.target.src !== `${NothingSvg}`) {
+                    e.target.src = `${NothingSvg}`;
+                  }
+                }}
+              />
+            </S.ImageWrapper>
+            <S.MovieDetails>
+              <S.HeaderWrapper>
+                <Header
+                  size={2}
+                  title={movie?.title}
+                  subtitle={movie?.tagline}
+                />
+              </S.HeaderWrapper>
+              <S.DetailsWrapper>
+                <S.RatingsWrapper>
+                  <Rating number={movie?.vote_average / 2} />
+                  <S.RatingNumber>
+                    {movie?.vote_average.toFixed(1)}
+                  </S.RatingNumber>
+                </S.RatingsWrapper>
+                <S.Info>
+                  {!movie?.loading &&
+                    renderInfo(
+                      movie.spoken_languages,
+                      movie.runtime,
+                      splitYear(movie.release_date)
+                    )}
+                </S.Info>
+              </S.DetailsWrapper>
+              <S.Heading> The genres</S.Heading>
+              <S.LinkWrapper> {renderGenres(movie?.genres)}</S.LinkWrapper>
+              <S.Heading> Synopsis </S.Heading>
+              <S.Synopsis>
+                {movie?.overview
+                  ? movie?.overview
+                  : 'There is no synopsis available'}
+              </S.Synopsis>
+              <S.ButtonsWrapper>
+                <S.LeftButtons>
+                  {renderWebsite(movie?.homepage)}
+                  {renderImdb(movie?.imdb_id)}
+                  {renderTrailer(movie?.videos?.results)}
+                </S.LeftButtons>
+              </S.ButtonsWrapper>
+            </S.MovieDetails>
+          </S.MovieWrapper>
+        )}
       </LazyLoad>
+      <Header title="Recommended" subtitle="movies" />
+      {renderRecommendedMovies(recommended, secure_base_url)}
     </S.Wrapper>
   );
 };
@@ -154,6 +179,25 @@ const renderTrailer = (videos) => {
       <Button title="trailer" icon={faPlay} />
     </S.AWrapper>
   );
+};
+
+const renderRecommendedMovies = (recommended, baseurl) => {
+  if (recommended?.loading) {
+    return <p> Loading...</p>;
+  } else if (recommended.total_results === 0) {
+    return (
+      <NotFound
+        title="Sorry!"
+        subtitle={`There are no recommended movies...`}
+      />
+    );
+  } else {
+    return (
+      <Element name="scroll-to-element">
+        <MoviesList movies={recommended} baseurl={baseurl} />
+      </Element>
+    );
+  }
 };
 
 export default Movie;

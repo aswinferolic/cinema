@@ -188,3 +188,31 @@ export const clearMovie = () => {
     type: TYPES.FETCH_MOVIE_LOADING,
   };
 };
+
+export const getRecommendedMovies = (id, page) => async (dispatch) => {
+  try {
+    dispatch({
+      type: TYPES.FETCH_RECOMMENDATIONS_LOADING,
+    });
+
+    const res = await movieAPI.get(`/movie/${id}/recommendations`, {
+      params: {
+        page,
+      },
+    });
+
+    await dispatch({
+      type: TYPES.FETCH_RECOMMENDATIONS,
+      payload: res?.data,
+    });
+
+    dispatch({
+      type: TYPES.FETCH_RECOMMENDATIONS_FINISHED,
+    });
+  } catch (error) {
+    dispatch({
+      type: TYPES.INSERT_ERROR,
+      payload: error?.response,
+    });
+  }
+};
