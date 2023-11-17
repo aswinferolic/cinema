@@ -18,6 +18,7 @@ import {faImdb} from '@fortawesome/free-brands-svg-icons';
 import {animateScroll as scroll, Element} from 'react-scroll';
 import NotFound from '../../components/NotFound';
 import MoviesList from '../../components/MoviesList';
+import {Helmet} from 'react-helmet';
 
 const Movie = () => {
   const dispatch = useDispatch();
@@ -34,16 +35,19 @@ const Movie = () => {
   const recommended = useSelector((state) => state.recommendedMovies);
 
   useEffect(() => {
-    clearMovie();
     dispatch(getMovieDetail(movieId));
     dispatch(getRecommendedMovies(movieId), page);
     scroll.scrollToTop({
       smooth: true,
     });
+    return () => {
+      clearMovie();
+    };
   }, [dispatch, movieId, page]);
 
   return (
     <S.Wrapper>
+      {!movie?.loading && <Helmet> {`${movie?.title}`} </Helmet>}
       <LazyLoad offset={500}>
         {!movie?.loading && (
           <S.MovieWrapper>

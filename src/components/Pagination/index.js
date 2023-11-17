@@ -14,6 +14,7 @@ const Pagination = ({movies}) => {
       offset: -50,
     });
   };
+
   if (total_pages === 1) return null;
 
   // on first page
@@ -31,11 +32,11 @@ const Pagination = ({movies}) => {
     return (
       <S.Wrapper type="both">
         <S.LinkWrapper to={`?page=${page - 1}`} onClick={scrollTo}>
-          <Button title={`Page ${page - 1}`} left solid icon={faArrowLeft} />
+          <Button title={`Page ${page - 1}`} $left $solid icon={faArrowLeft} />
         </S.LinkWrapper>
 
         <S.LinkWrapper to={`?page=${page + 1}`} onClick={scrollTo}>
-          <Button title={`Page ${page + 1}`} solid icon={faArrowRight} />
+          <Button title={`Page ${page + 1}`} $solid icon={faArrowRight} />
         </S.LinkWrapper>
       </S.Wrapper>
     );
@@ -46,7 +47,7 @@ const Pagination = ({movies}) => {
     return (
       <S.Wrapper type="one">
         <S.LinkWrapper to={`?page=${page - 1}`} onClick={scrollTo}>
-          <Button solid title={`Page ${page - 1}`} icon={faArrowLeft} />
+          <Button $solid title={`Page ${page - 1}`} icon={faArrowLeft} />
         </S.LinkWrapper>
       </S.Wrapper>
     );

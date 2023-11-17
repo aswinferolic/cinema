@@ -56,12 +56,12 @@ const App = () => {
         <Wrapper>
           <Routes>
             <Route
-              path="/"
-              element={<Navigate replace to="/discover/popular" />}
+              path="/cinema"
+              element={<Navigate replace to="/discover/Popular" />}
             />
             <Route
-              path="/cinema"
-              element={<Navigate replace to="/discover/popular" />}
+              path="/"
+              element={<Navigate replace to="/discover/Popular" />}
             />
             <Route path="/discover/:name" element={<Discover />} />
             <Route path="/genres/:name" element={<Genres />} />

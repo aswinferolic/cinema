@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import styled from 'styled-components';
+import {Helmet} from 'react-helmet';
 import {getMoviesGenres, setSelectedMenu} from '../../redux/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {useLocation, useParams} from 'react-router-dom';
@@ -31,6 +32,11 @@ const Genres = () => {
   }, [dispatch, name, page]);
   return (
     <Wrapper>
+      {!config?.loading && (
+        <Helmet>
+          <title> {`${config?.selected} Movies`} </title>
+        </Helmet>
+      )}
       {!config?.loading && (
         <Header title={config?.selected} subtitle="movies" />
       )}

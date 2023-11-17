@@ -8,6 +8,7 @@ import {clearMovies, getMoviesSearch} from '../../redux/actions';
 import Pagination from '../../components/Pagination';
 import {animateScroll as scroll} from 'react-scroll';
 import NotFound from '../../components/NotFound';
+import {Helmet} from 'react-helmet';
 
 const Wrapper = styled.div`
   display: flex;
@@ -41,15 +42,20 @@ const Search = () => {
 
   if (movies?.total_results === 0) {
     return (
-      <NotFound
-        title="Sorry!"
-        subtitle={`There were no results for ${query}`}
-      />
+      <>
+        <Helmet>search results</Helmet>
+
+        <NotFound
+          title="Sorry!"
+          subtitle={`There were no results for ${query}`}
+        />
+      </>
     );
   }
 
   return (
     <Wrapper>
+      <Helmet>search results</Helmet>
       <Header title={query} subtitle="search results" />
       {!config?.loading && (
         <MoviesList movies={movies} baseurl={secure_base_url} />

@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import {useParams, useLocation} from 'react-router-dom';
+import {Helmet} from 'react-helmet';
 import {animateScroll as scroll} from 'react-scroll';
 import {
   clearMovies,
@@ -44,6 +45,11 @@ const Discover = () => {
   if (config?.loading) return <p> Loading...</p>;
   return (
     <Wrapper>
+      {!config?.loading && (
+        <Helmet>
+          <title> {`${config?.selected} Movies`} </title>
+        </Helmet>
+      )}
       {!config?.loading && (
         <Header title={config?.selected} subtitle="movies" />
       )}
